@@ -1,0 +1,27 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-magicuserapp-dev-165111-authRole",
+      "UnauthRoleArn": "arn:aws:iam::834100535047:role/amplify-magicuserapp-dev-165111-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::834100535047:role/amplify-magicuserapp-dev-165111-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-magicuserapp-dev-165111-deployment",
+      "UnauthRoleName": "amplify-magicuserapp-dev-165111-unauthRole",
+      "StackName": "amplify-magicuserapp-dev-165111",
+      "StackId": "arn:aws:cloudformation:eu-central-1:834100535047:stack/amplify-magicuserapp-dev-165111/185e36a0-cf9f-11ec-bf2a-02519206ff7e",
+      "AmplifyAppId": "dmram6bl9tpqs",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-magicuserapp-dev-165111-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "magicuserappe68ea849e68ea849": {}
+      },
+      "function": {
+        "magicuserappe68ea849e68ea849PostConfirmation": {
+          "deploymentBucketName": "amplify-magicuserapp-dev-165111-deployment",
+          "s3Key": "amplify-builds/magicuserappe68ea849e68ea849PostConfirmation-737835334139324f6635-build.zip"
+        }
+      }
+    }
+  }
+}

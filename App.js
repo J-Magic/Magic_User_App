@@ -9,8 +9,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapScreen from './screens/MapScreen';
 import tw from 'twrnc';
+import Amplify, { Auth } from 'aws-amplify';
+import config from './src/aws-exports';
+//Amplify.configure(config);
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
 
-export default function App() {
+import { withAuthenticator } from 'aws-amplify-react-native/dist/Auth';
+
+export default withAuthenticator(function App() {
+  // Auth.signOut();
   const Stack = createNativeStackNavigator();
   return (
     <Provider store={store}>
@@ -43,4 +55,4 @@ export default function App() {
       </NavigationContainer>
     </Provider>
   );
-}
+});

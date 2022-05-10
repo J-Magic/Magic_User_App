@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "magicuserapp",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authmagicuserappe68ea849e68ea849",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "magicuserapp",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/joshuamilanya/Documents/CodingProjects/Magic_User_App/amplify/backend/api/magicuserapp/schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authmagicuserappe68ea849e68ea849"
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "AWS_IAM"
+      }
+    ]
+  }
+}
