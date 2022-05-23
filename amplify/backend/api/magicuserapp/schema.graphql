@@ -2,4 +2,25 @@ type User @model @auth(rules: [{ allow: private }]) {
   id: ID!
   username: String!
   email: String!
+
+  orders: [Order] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Car @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  type: String!
+  latitude: Float
+  longitude: Float
+  heading: Float
+
+  orders: [Order] @hasMany(indexName: "byCar", fields: ["id"])
+}
+
+type Order @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  createdAt: ID!
+
+  userId: ID! @index(name: "byUser")
+
+  carId: ID! @index(name: "byCar", sortKeyFields: ["createdAt"])
 }
