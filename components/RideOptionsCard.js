@@ -16,8 +16,14 @@ import MagicTravel from '../assets/MagicTravel.jpg';
 import MagicLux from '../assets/MagicLux.jpg';
 import { useRef } from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { useSelector } from 'react-redux';
-import { selectTravelTimeInformation } from '../slices/navSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectTravelTimeInformation,
+  selectOrigin,
+  selectDestination,
+} from '../slices/navSlice';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { createOrder } from '../src/graphql/mutations';
 
 const data = [
   {
@@ -47,7 +53,48 @@ const RideOptionsCard = () => {
   const navigation = useNavigation();
   const bottomSheetRef = useRef(null);
   const [selected, setSelected] = useState(null);
+  const dispatch = useDispatch();
+  const origin = useSelector(selectOrigin);
+  const destination = useSelector(selectDestination);
   const travelTimeInformation = useSelector(selectTravelTimeInformation);
+
+  console.log('ORIGIN: ', origin);
+
+  const confirmRequest = async () => {
+    const type = selected?.title;
+    if (!type) {
+      return;
+    }
+
+    // Submit to Redis
+
+    // Submit to dynamoDB Orders Table
+    try {
+      const userInfo = await Auth.currentAuthenticatedUser();
+
+      const date = new Date();
+      const input = {
+        createdAt: date.toISOString(),
+        type,
+        originLatitude: origin.location.lat,
+        originLongitude: origin.location.lng,
+        destLatitude: destination.location.lat,
+        destLongitude: destination.location.lng,
+        userId: userInfo.attributes.sub,
+        carId: '1',
+      };
+
+      const response = await API.graphql(
+        graphqlOperation(createOrder, {
+          input: input,
+        })
+      );
+
+      console.log('DynamoDB: ', response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <SafeAreaView style={tw`bg-white flex-grow `}>
@@ -58,7 +105,10 @@ const RideOptionsCard = () => {
 
       <View>
         <TouchableOpacity
-          onPress={() => navigation.navigate('NavigateCard')}
+          onPress={() => {
+            dispatch(setOrdering(false));
+            navigation.navigate('NavigateCard');
+          }}
           style={tw`absolute top-3 left-5 z-50 p-3 rounded-full`}
         >
           <Icon name='chevron-left' type='fontawesome' />
@@ -99,6 +149,9 @@ const RideOptionsCard = () => {
       />
       <View style={tw`mt-auto border-t border-gray-300`}>
         <TouchableOpacity
+          onPress={() => {
+            confirmRequest();
+          }}
           disabled={!selected}
           style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-300'}`}
         >

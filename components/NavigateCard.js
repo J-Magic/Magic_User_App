@@ -5,7 +5,7 @@ import tw from 'twrnc';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useDispatch } from 'react-redux';
-import { setDestination } from '../slices/navSlice';
+import { setDestination, setOrdering } from '../slices/navSlice';
 import { useNavigation } from '@react-navigation/native';
 import NavFavourites from './NavFavourites';
 import { Icon } from '@rneui/base';
@@ -31,12 +31,14 @@ const NavigateCard = () => {
               language: 'en',
             }}
             onPress={(data, details = null) => {
+              console.log('DEST: ', details.geometry.location);
               dispatch(
                 setDestination({
                   location: details.geometry.location,
                   description: data.description,
                 })
               );
+              dispatch(setOrdering(true));
               navigation.navigate('RideOptionsCard');
             }}
           />

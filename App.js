@@ -24,8 +24,15 @@ import HomeScreenMs from './screens/HomeScreenMs';
 import MagicHotels from './screens/MagicHotels';
 import MagicDeals from './screens/MagicDeals';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TravelDetails from './screens/TravelDetails';
 import ViewStay from './screens/ViewStay';
+import WishList from './screens/WishList';
+import Trips from './screens/Trips';
+import Inbox from './screens/Inbox';
+import Profile from './screens/Profile';
+import ExploreNavigator from './screens/ExploreNavigator';
+import TopNavigator from './screens/TopNavigator';
 
 //Amplify.configure(config);
 Amplify.configure({
@@ -35,14 +42,36 @@ Amplify.configure({
   },
 });
 
-const TopTab = createMaterialTopTabNavigator();
+//const TopTab = createMaterialTopTabNavigator();
 const Stack = createNativeStackNavigator();
+const BottomTab = createBottomTabNavigator();
+//const ExploreNavigator = createNativeStackNavigator();
+
+function RootTab() {
+  return (
+    <BottomTab.Navigator>
+      <BottomTab.Screen name='ExploreNavigator' component={ExploreNavigator} />
+      <BottomTab.Screen name='Wishlist' component={WishList} />
+      <BottomTab.Screen name='Trips' component={Trips} />
+      <BottomTab.Screen name='Inbox' component={Inbox} />
+      <BottomTab.Screen name='Profile' component={Profile} />
+    </BottomTab.Navigator>
+  );
+}
 
 function HomeSearchButton() {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate(TravelDetails)}
+      // onPress={() => navigation.navigate(TravelDetails)}
+      onPress={() => {
+        navigation.navigate('TopNavigator', {
+          screen: 'StayNavigator',
+          params: {
+            screen: 'TravelDetails',
+          },
+        });
+      }}
       style={[
         tw`bg-gray-100 mt-3 mb-2`,
         {
@@ -79,81 +108,81 @@ function HomeSearchButton() {
   );
 }
 
-function HomeTabs() {
-  return (
-    <TopTab.Navigator
-      screenOptions={{
-        tabBarShowLabel: true,
-        tabBarActiveTintColor: 'black',
-        tabBarIndicatorStyle: {
-          backgroundColor: '#f87171',
-          height: 2,
-        },
+// function HomeTabs() {
+//   return (
+// <TopTab.Navigator
+//   screenOptions={{
+//     tabBarShowLabel: true,
+//     tabBarActiveTintColor: 'black',
+//     tabBarIndicatorStyle: {
+//       backgroundColor: '#f87171',
+//       height: 2,
+//     },
 
-        tabBarScrollEnabled: true,
-        tabBarLabelStyle: { fontSize: 10 },
-        tabBarItemStyle: { width: 135, height: 50 },
-        tabBarStyle: {
-          height: 60,
-          backgroundColor: 'white',
-        },
-        tabBarIconStyle: {
-          width: 35,
-          height: 23,
-        },
-      }}
-    >
-      <TopTab.Screen
-        name='Magic Stays'
-        component={HomeScreenMs}
-        options={{
-          tabBarIcon: ({ focused, color }) => (
-            <Icon
-              type='Ionicon'
-              // name={focused ? 'home' : 'ios-home-sharp'}
-              name='home'
-              // size={26}
-              color={focused ? '#f87171' : 'black'}
-            />
-          ),
-        }}
-      />
+//     tabBarScrollEnabled: true,
+//     tabBarLabelStyle: { fontSize: 10 },
+//     tabBarItemStyle: { width: 135, height: 50 },
+//     tabBarStyle: {
+//       height: 60,
+//       backgroundColor: 'white',
+//     },
+//     tabBarIconStyle: {
+//       width: 35,
+//       height: 23,
+//     },
+//   }}
+// >
+//   <TopTab.Screen
+//     name='Magic Stays'
+//     component={HomeScreenMs}
+//     options={{
+//       tabBarIcon: ({ focused, color }) => (
+//         <Icon
+//           type='Ionicon'
+//           // name={focused ? 'home' : 'ios-home-sharp'}
+//           name='home'
+//           // size={26}
+//           color={focused ? '#f87171' : 'black'}
+//         />
+//       ),
+//     }}
+//   />
 
-      <TopTab.Screen
-        name='Magic Hotels'
-        component={MagicHotels}
-        options={{
-          tabBarIcon: ({ focused, color }) => (
-            <Icon
-              type='font-awesome'
-              name='hotel'
-              // size={26}
-              color={focused ? '#f87171' : 'black'}
-            />
-          ),
-        }}
-      />
+//   <TopTab.Screen
+//     name='Magic Hotels'
+//     component={MagicHotels}
+//     options={{
+//       tabBarIcon: ({ focused, color }) => (
+//         <Icon
+//           type='font-awesome'
+//           name='hotel'
+//           // size={26}
+//           color={focused ? '#f87171' : 'black'}
+//         />
+//       ),
+//     }}
+//   />
 
-      <TopTab.Screen
-        name='Magic Deals'
-        component={MagicDeals}
-        options={{
-          tabBarIcon: ({ focused, color }) => (
-            // tabBarLabel: ({ focused, color }) => (
-            <Icon
-              // type='font-awesome'
-              // name='heart-o'
-              type='antdesign'
-              name='heart'
-              // size={26}
-              color={focused ? '#f87171' : 'black'}
-            />
-          ),
-        }}
-      />
-    </TopTab.Navigator>
-  );
-}
+//   <TopTab.Screen
+//     name='Magic Deals'
+//     component={MagicDeals}
+//     options={{
+//       tabBarIcon: ({ focused, color }) => (
+//         // tabBarLabel: ({ focused, color }) => (
+//         <Icon
+//           // type='font-awesome'
+//           // name='heart-o'
+//           type='antdesign'
+//           name='heart'
+//           // size={26}
+//           color={focused ? '#f87171' : 'black'}
+//         />
+//       ),
+//     }}
+//   />
+// </TopTab.Navigator>
+//   );
+// }
 export default withAuthenticator(function App() {
   // Auth.signOut();
 
@@ -168,23 +197,23 @@ export default withAuthenticator(function App() {
             enabled
           >
             <Stack.Navigator>
-              {/* <Stack.Screen
+              <Stack.Screen
                 name='HomeScreen'
                 component={HomeScreen}
                 options={{
                   headerShown: false,
                 }}
-              /> */}
-              {/* <Stack.Screen
-                  name='MapScreen'
-                  component={MapScreen}
-                  options={{
-                    headerShown: false,
-                  }}
-                /> */}
+              />
               <Stack.Screen
-                name='HomeTabs'
-                component={HomeTabs}
+                name='MapScreen'
+                component={MapScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              {/* <Stack.Screen
+                name='RootTab'
+                component={RootTab}
                 options={{
                   headerTitle: (props) => <HomeSearchButton {...props} />,
                   headerStyle: {
@@ -192,15 +221,15 @@ export default withAuthenticator(function App() {
                   },
                   headerShadowVisible: false,
                 }}
-              />
-              <Stack.Screen
+              /> */}
+              {/* <Stack.Screen
                 name='TravelDetails'
                 component={TravelDetails}
                 options={{
                   headerShown: false,
                   // headerTitle: (props) => <HomeSearchButton {...props} />,
                 }}
-              />
+              /> */}
 
               {/* <Stack.Screen
                 name='StaySearchResults'
@@ -210,13 +239,13 @@ export default withAuthenticator(function App() {
                 }}
               /> */}
 
-              <Stack.Screen
+              {/* <Stack.Screen
                 name='ViewStay'
                 component={ViewStay}
                 options={{
                   headerShown: false,
                 }}
-              />
+              /> */}
             </Stack.Navigator>
           </KeyboardAvoidingView>
         </SafeAreaProvider>

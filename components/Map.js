@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { GOOGLE_MAPS_APIKEY } from '@env';
@@ -10,12 +10,28 @@ import {
   selectOrigin,
   setTravelTimeInformation,
 } from '../slices/navSlice';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listCars } from '../src/graphql/queries';
 
 const Map = () => {
+  const [cars, setCars] = useState([]);
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
   const mapRef = useRef(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await API.graphql(graphqlOperation(listCars));
+        console.log(response);
+        setCars(response.data.listCars.items);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchCars();
+  }, []);
 
   useEffect(() => {
     if (!origin || !destination) return;
@@ -42,6 +58,17 @@ const Map = () => {
     };
     getTravelTime();
   }, [origin, destination, GOOGLE_MAPS_APIKEY]);
+
+  const getImage = (type) => {
+    if (type === 'MagicQuick') {
+      return require('../assets/top-UberX.png');
+    }
+    if (type === 'MagicTravel') {
+      return require('../assets/top-Comfort.png');
+    }
+    return require('../assets/top-UberXL.png');
+  };
+
   return (
     <MapView
       ref={mapRef}

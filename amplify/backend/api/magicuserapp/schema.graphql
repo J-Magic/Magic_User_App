@@ -20,6 +20,14 @@ type Order @model @auth(rules: [{ allow: private }]) {
   id: ID!
   createdAt: ID!
 
+  type: String!
+
+  originLatitude: Float!
+  originLongitude: Float!
+
+  destLatitude: Float!
+  destLongitude: Float!
+
   userId: ID! @index(name: "byUser")
 
   carId: ID! @index(name: "byCar", sortKeyFields: ["createdAt"])
